@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cron": "^1.0.9",
     "node-hue-api": "^1.0.5"
   }
 }

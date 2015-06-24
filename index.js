@@ -30,9 +30,9 @@ function createGroup(name, bulpArr) {
 
 state = lightState.create().on();
 
-api.setGroupLightState(2, state)
-    .then(displayResult)
-    .done();
+// api.setGroupLightState(2, state)
+//     .then(displayResult)
+//     .done();
 
 
 function disco() {
@@ -49,9 +49,9 @@ function disco() {
       .done();
 
 }
-// setInterval(function() {
-//   disco();
-// },200);
+setInterval(function() {
+  disco();
+},200);
 
 function createRandomColor() {
   return Math.floor(Math.random() * 255);
