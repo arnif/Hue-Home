@@ -1,13 +1,52 @@
 var HueUtil = require('./utils/hue.util');
 
+var express = require('express');
+var app = express();
+
 HueUtil.init();
 
-HueUtil.turnOnLight(4);
+app.post('/on', function(req, res) {
+  HueUtil.turnOnAllLights();
+  return res.sendStatus(200);
+});
 
-HueUtil.startDisco();
+app.post('/off', function(req, res) {
+  HueUtil.turnOffAllLights();
+  return res.sendStatus(200);
+});
 
-// --------------------------
-// Using a promise
+app.post('/on/:lightId', function(req, res) {
+
+  var lightId = req.params.lightId;
+  if (lightId) {
+    HueUtil.turnOnLight(lightId);
+    return res.sendStatus(200);
+  }
+  res.send('error');
+});
+
+app.post('/off/:lightId', function(req, res) {
+
+  var lightId = req.params.lightId;
+  if (lightId) {
+    HueUtil.turnOffLight(lightId);
+    return res.sendStatus(200);
+  }
+  res.send('error');
+});
+
+app.post('/disco/start', function(req, res) {
+  HueUtil.startDisco();
+  return res.sendStatus(200);
+});
+
+app.post('/disco/stop', function(req, res) {
+  HueUtil.stopDisco();
+  return res.sendStatus(200);
+});
+
+app.listen(3000);
+
 // api.groups().then(displayResult).done();
 // api.lights().then(displayResult).done();
 //
@@ -26,26 +65,3 @@ HueUtil.startDisco();
 // // api.setGroupLightState(2, state)
 // //     .then(displayResult)
 // //     .done();
-//
-//
-// function disco() {
-//   var r = createRandomColor();
-//   var g = createRandomColor();
-//   var b = createRandomColor();
-//   // Set light state to 'on' with warm white value of 500 and brightness set to 100%
-//   state = lightState.create().on().rgb(r,g,b);
-//   //
-//   // // --------------------------
-//   // // Using a promise
-//   api.setLightState(4, state)
-//       .then(displayResult)
-//       .done();
-//
-// }
-// // setInterval(function() {
-// //   disco();
-// // },200);
-//
-// function createRandomColor() {
-//   return Math.floor(Math.random() * 255);
-// }

@@ -1,8 +1,10 @@
+var q = require('q');
 var hue = require("node-hue-api"),
     HueApi = hue.HueApi,
     lightState = hue.lightState,
     api,
-    state;
+    state,
+    intervalId;
 
 var displayResult = function(result) {
     console.log(JSON.stringify(result, null, 2));
@@ -21,13 +23,29 @@ function startCronJob() {
     }, null, true);
 }
 
+function getAllLights() {
+  var deferred = q.defer();
+  api.lights()
+      .then(function(lights) {
+      if (lights) {
+        deferred.resolve(lights);
+      }
+  })
+  .fail(function(err) {
+    deferred.reject({error: err});
+  })
+  .done();
+
+  return deferred.promise;
+}
+
 function turnOffLight(lightId) {
   state = lightState.create().off();
   setLightState(lightId, state);
 }
 
 function turnOnLight(lightId) {
-  state = lightState.create().on();
+  state = lightState.create().on(); //TODO brightness ??
   setLightState(lightId, state);
 
 }
@@ -42,9 +60,6 @@ function createRandomColor() {
   return Math.floor(Math.random() * 255);
 }
 
-function createDisco(lightId) {
-
-}
 
 module.exports = {
 
@@ -52,6 +67,22 @@ module.exports = {
     var hostname = "10.0.1.2",
         username = "newdeveloper";
     api = new HueApi(hostname, username);
+  },
+
+  turnOnAllLights: function() {
+    getAllLights().then(function(lightsObj) {
+      lightsObj.lights.map(function(light) {
+        turnOnLight(light.id);
+      });
+    });
+  },
+
+  turnOffAllLights: function() {
+    getAllLights().then(function(lightsObj) {
+      lightsObj.lights.map(function(light) {
+        turnOffLight(light.id);
+      });
+    });
   },
 
   turnOffLight: function(lightId) {
@@ -77,9 +108,13 @@ module.exports = {
           .done();
 
     }
-    setInterval(function() {
+    intervalId = setInterval(function() {
       disco();
     },200);
+  },
+
+  stopDisco: function() {
+    clearInterval(intervalId);
   }
 
 
