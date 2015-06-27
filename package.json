@@ -4,14 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1 "
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cron": "^1.0.9",
     "express": "^4.13.0",
+    "jasmine-pit": "^2.0.2",
     "node-hue-api": "^1.0.5",
     "q": "^1.4.1"
+  },
+  "devDependencies": {
+    "jest-cli": "^0.4.13",
+    "rsvp": "^3.0.18"
   }
 }
