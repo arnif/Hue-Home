@@ -125,7 +125,7 @@ module.exports = {
     }
     intervalId = setInterval(function() {
       disco();
-    },2000);
+    },200);
   },
 
   stopDisco: function() {
