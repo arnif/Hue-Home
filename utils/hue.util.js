@@ -69,6 +69,8 @@ module.exports = {
     api = new HueApi(hostname, username);
   },
 
+  getAllLights: getAllLights,
+
   turnOnAllLights: function() {
     getAllLights().then(function(lightsObj) {
       lightsObj.lights.map(function(light) {
@@ -94,7 +96,7 @@ module.exports = {
   },
 
   startDisco: function(lightArr) {
-    function disco() {
+    function disco(lightId) {
       var r = createRandomColor();
       var g = createRandomColor();
       var b = createRandomColor();
@@ -103,13 +105,14 @@ module.exports = {
       //
       // // --------------------------
       // // Using a promise
-      api.setLightState(4, state)
-          .then(displayResult)
+      api.setLightState(lightId, state)
+          .then()
           .done();
 
     }
     intervalId = setInterval(function() {
-      disco();
+      disco(4);
+      disco(8);
     },200);
   },
 

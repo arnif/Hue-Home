@@ -5,17 +5,24 @@ var app = express();
 
 HueUtil.init();
 
-app.post('/on', function(req, res) {
+app.get('/', function(req, res) {
+  HueUtil.getAllLights().then(function(response){
+    res.json(response);
+  });
+});
+
+
+app.get('/on', function(req, res) {
   HueUtil.turnOnAllLights();
   return res.sendStatus(200);
 });
 
-app.post('/off', function(req, res) {
+app.get('/off', function(req, res) {
   HueUtil.turnOffAllLights();
   return res.sendStatus(200);
 });
 
-app.post('/on/:lightId', function(req, res) {
+app.get('/on/:lightId', function(req, res) {
 
   var lightId = req.params.lightId;
   if (lightId) {
@@ -25,7 +32,7 @@ app.post('/on/:lightId', function(req, res) {
   res.send('error');
 });
 
-app.post('/off/:lightId', function(req, res) {
+app.get('/off/:lightId', function(req, res) {
 
   var lightId = req.params.lightId;
   if (lightId) {
@@ -35,12 +42,12 @@ app.post('/off/:lightId', function(req, res) {
   res.send('error');
 });
 
-app.post('/disco/start', function(req, res) {
+app.get('/disco/start', function(req, res) {
   HueUtil.startDisco();
   return res.sendStatus(200);
 });
 
-app.post('/disco/stop', function(req, res) {
+app.get('/disco/stop', function(req, res) {
   HueUtil.stopDisco();
   return res.sendStatus(200);
 });
