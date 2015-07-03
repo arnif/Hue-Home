@@ -41,19 +41,26 @@ function getAllLights() {
 
 function turnOffLight(lightId) {
   state = lightState.create().off();
-  setLightState(lightId, state);
+  return setLightState(lightId, state);
 }
 
 function turnOnLight(lightId) {
   state = lightState.create().on(); //TODO brightness ??
-  setLightState(lightId, state);
-
+  return setLightState(lightId, state);
 }
 
 function setLightState(lightId, state) {
+  var deferred = q.defer();
   api.setLightState(lightId, state)
-      .then(displayResult)
+      .then(function(results) {
+        deferred.resolve(results);
+      })
+      .fail(function(err) {
+        deferred.reject(err);
+      })
       .done();
+
+  return deferred.promise;
 }
 
 function createRandomColor() {
@@ -88,11 +95,19 @@ module.exports = {
   },
 
   turnOffLight: function(lightId) {
-    turnOffLight(lightId);
+    var deferred = q.defer();
+    turnOffLight(lightId).then(function(results) {
+      deferred.resolve(results);
+    });
+    return deferred.promise;
   },
 
   turnOnLight: function(lightId) {
-    turnOnLight(lightId);
+    var deferred = q.defer();
+    turnOnLight(lightId).then(function(results) {
+      deferred.resolve(results);
+    });
+    return deferred.promise;
   },
 
   startDisco: function(lightArr) {

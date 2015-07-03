@@ -26,20 +26,28 @@ app.get('/on/:lightId', function(req, res) {
 
   var lightId = req.params.lightId;
   if (lightId) {
-    HueUtil.turnOnLight(lightId);
-    return res.sendStatus(200);
+    HueUtil.turnOnLight(lightId).then(function(results) {
+        return res.send(results);
+    })
+    .fail(function(err) {
+      return res.send(err);
+    });
   }
-  res.send('error');
+
 });
 
 app.get('/off/:lightId', function(req, res) {
 
   var lightId = req.params.lightId;
   if (lightId) {
-    HueUtil.turnOffLight(lightId);
-    return res.sendStatus(200);
+    HueUtil.turnOffLight(lightId).then(function(results) {
+        return res.send(results);
+    })
+    .fail(function(err) {
+        res.send(err);
+    });  
   }
-  res.send('error');
+
 });
 
 app.get('/disco/start', function(req, res) {
