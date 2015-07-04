@@ -125,10 +125,15 @@ module.exports = {
           .done();
 
     }
-    intervalId = setInterval(function() {
-      disco(4);
-      disco(8);
-    },200);
+    if (!intervalId) {
+      intervalId = setInterval(function() {
+        disco(4);
+        disco(8);
+      },200);
+    } else {
+      this.stopDisco();
+    }
+
   },
 
   stopDisco: function() {
