@@ -138,6 +138,7 @@ module.exports = {
 
   stopDisco: function() {
     clearInterval(intervalId);
+    intervalId = false;
   }
 
 
