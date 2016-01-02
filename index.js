@@ -55,8 +55,12 @@ app.get('/off/:lightId', function(req, res) {
 
 });
 
-app.post('/alert/:lightId', function(req, res) {
+app.get('/alert', function(req, res) {
+  HueUtil.alertAllLights();
+  return res.sendStatus(200);
+});
 
+app.post('/alert/:lightId', function(req, res) {
   var lightId = req.params.lightId;
   var short = req.query.short;
   if (lightId) {
@@ -67,7 +71,6 @@ app.post('/alert/:lightId', function(req, res) {
         res.send(err);
     });
   }
-
 });
 
 app.get('/disco/start', function(req, res) {

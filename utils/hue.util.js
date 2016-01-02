@@ -1,4 +1,7 @@
 var q = require('q');
+var HOST = process.env.HUE_HOSTNAME;
+var USER = process.env.HUE_USERNAME;
+
 var hue = require("node-hue-api"),
     HueApi = hue.HueApi,
     lightState = hue.lightState,
@@ -16,7 +19,7 @@ function startCronJob() {
     console.log('Turning of the lights');
     //TODO check if spotify or plex is playing
     api.lights().then(function(lightsObj) {
-      lightsObj.lights.map(function(light) {
+      lightsObj.lights.forEach(function(light) {
         turnOffLight(light.id);
       });
     }).done();
@@ -92,12 +95,23 @@ function createRandomColor() {
   return Math.floor(Math.random() * 255);
 }
 
+function error(reason) {
+  console.error(reason);
+  process.exit(1);
+}
+
 
 module.exports = {
 
   init: function() {
-    var hostname = "10.0.1.2",
-        username = "newdeveloper";
+    if (!HOST) {
+      error('missing HUE_HOSTNAME');
+    }
+    if (!USER) {
+      error('missing HUE_USERNAME');
+    }
+    var hostname = HOST,
+        username = USER;
     api = new HueApi(hostname, username);
   },
 
@@ -107,7 +121,7 @@ module.exports = {
 
   turnOnAllLights: function() {
     getAllLights().then(function(lightsObj) {
-      lightsObj.lights.map(function(light) {
+      lightsObj.lights.forEach(function(light) {
         turnOnLight(light.id);
       });
     });
@@ -115,7 +129,7 @@ module.exports = {
 
   turnOffAllLights: function() {
     getAllLights().then(function(lightsObj) {
-      lightsObj.lights.map(function(light) {
+      lightsObj.lights.forEach(function(light) {
         turnOffLight(light.id);
       });
     });
@@ -137,6 +151,14 @@ module.exports = {
     return deferred.promise;
   },
 
+  alertAllLights: function() {
+    getAllLights().then(function(lightsObj) {
+      lightsObj.lights.forEach(function(light) {
+        alertLight(light.id);
+      });
+    });
+  },
+
   alertLight: function(lightId, short) {
     var deferred = q.defer();
     alertLight(lightId, short).then(function(results) {
@@ -152,14 +174,12 @@ module.exports = {
       var b = createRandomColor();
 
       state = lightState.create().on().rgb(r,g,b);
-      //
-      // // --------------------------
-      // // Using a promise
+
       api.setLightState(lightId, state)
           .then()
           .done();
-
     }
+
     if (!intervalId) {
       intervalId = setInterval(function() {
         disco(4);
@@ -168,7 +188,6 @@ module.exports = {
     } else {
       this.stopDisco();
     }
-
   },
 
   stopDisco: function() {
