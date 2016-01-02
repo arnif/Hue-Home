@@ -65,6 +65,15 @@ function turnOnLight(lightId) {
   return setLightState(lightId, state);
 }
 
+function alertLight(lightId, short) {
+  if (short) {
+    state = lightState.create().alertShort();
+  } else {
+    state = lightState.create().alertLong();
+  }
+  return setLightState(lightId, state);
+}
+
 function setLightState(lightId, state) {
   var deferred = q.defer();
   api.setLightState(lightId, state)
@@ -123,6 +132,14 @@ module.exports = {
   turnOnLight: function(lightId) {
     var deferred = q.defer();
     turnOnLight(lightId).then(function(results) {
+      deferred.resolve(results);
+    });
+    return deferred.promise;
+  },
+
+  alertLight: function(lightId, short) {
+    var deferred = q.defer();
+    alertLight(lightId, short).then(function(results) {
       deferred.resolve(results);
     });
     return deferred.promise;

@@ -50,7 +50,22 @@ app.get('/off/:lightId', function(req, res) {
     })
     .fail(function(err) {
         res.send(err);
-    });  
+    });
+  }
+
+});
+
+app.post('/alert/:lightId', function(req, res) {
+
+  var lightId = req.params.lightId;
+  var short = req.query.short;
+  if (lightId) {
+    HueUtil.alertLight(lightId, short).then(function(results) {
+        return res.send(results);
+    })
+    .fail(function(err) {
+        res.send(err);
+    });
   }
 
 });
