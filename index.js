@@ -11,6 +11,11 @@ app.get('/', function(req, res) {
   });
 });
 
+app.get('/state', function(req, res) {
+  HueUtil.getFullState().then(function(response){
+    res.json(response);
+  });
+});
 
 app.get('/on', function(req, res) {
   HueUtil.turnOnAllLights();

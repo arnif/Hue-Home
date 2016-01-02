@@ -39,6 +39,22 @@ function getAllLights() {
   return deferred.promise;
 }
 
+function getFullState() {
+  var deferred = q.defer();
+  api.getFullState()
+      .then(function(lights) {
+      if (lights) {
+        deferred.resolve(lights);
+      }
+  })
+  .fail(function(err) {
+    deferred.reject({error: err});
+  })
+  .done();
+
+  return deferred.promise;
+}
+
 function turnOffLight(lightId) {
   state = lightState.create().off();
   return setLightState(lightId, state);
@@ -77,6 +93,8 @@ module.exports = {
   },
 
   getAllLights: getAllLights,
+
+  getFullState: getFullState,
 
   turnOnAllLights: function() {
     getAllLights().then(function(lightsObj) {
