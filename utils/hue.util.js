@@ -100,9 +100,7 @@ function error(reason) {
   process.exit(1);
 }
 
-
 module.exports = {
-
   init: function() {
     if (!HOST) {
       error('missing HUE_HOSTNAME');
@@ -194,6 +192,4 @@ module.exports = {
     clearInterval(intervalId);
     intervalId = false;
   }
-
-
 }
