@@ -17,6 +17,12 @@ app.get('/state', function(req, res) {
   });
 });
 
+app.get('/scenes', function(req, res) {
+  HueUtil.getAllScenes().then(function(response){
+    res.json(response);
+  });
+});
+
 app.get('/on', function(req, res) {
   HueUtil.turnOnAllLights();
   return res.sendStatus(200);

@@ -91,6 +91,22 @@ function setLightState(lightId, state) {
   return deferred.promise;
 }
 
+function getAllScenes() {
+  var deferred = q.defer();
+  api.getScenes()
+      .then(function(lights) {
+      if (lights) {
+        deferred.resolve(lights);
+      }
+  })
+  .fail(function(err) {
+    deferred.reject({error: err});
+  })
+  .done();
+
+  return deferred.promise;
+}
+
 function createRandomColor() {
   return Math.floor(Math.random() * 255);
 }
@@ -116,6 +132,8 @@ module.exports = {
   getAllLights: getAllLights,
 
   getFullState: getFullState,
+
+  getAllScenes: getAllScenes,
 
   turnOnAllLights: function() {
     getAllLights().then(function(lightsObj) {
