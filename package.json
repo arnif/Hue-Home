@@ -13,7 +13,7 @@
     "cron": "^1.0.9",
     "express": "^4.13.0",
     "jasmine-pit": "^2.0.2",
-    "node-hue-api": "1.2.1",
+    "node-hue-api": "2.2.0",
     "q": "^1.4.1"
   },
   "devDependencies": {
